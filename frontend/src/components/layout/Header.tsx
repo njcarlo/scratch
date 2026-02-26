@@ -2,7 +2,7 @@
 
 import { useTaskStore } from '@/store/useTaskStore';
 import { Button } from '@/components/ui/button';
-import { Plus, LayoutGrid, List, Search } from 'lucide-react';
+import { Plus, LayoutGrid, List, Search, Github } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 export function Header() {
@@ -44,6 +44,21 @@ export function Header() {
                             <List className="h-4 w-4" />
                         </Button>
                     </div>
+
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0"
+                        asChild
+                    >
+                        <a
+                            href="https://github.com/njcarlo/scratch"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Github className="h-4 w-4" />
+                        </a>
+                    </Button>
                     <Button onClick={() => setCreateModalOpen(true)} size="sm" className="gap-1 shadow-lg shadow-primary/20">
                         <Plus className="h-4 w-4" />
                         <span className="hidden sm:inline">New Task</span>
