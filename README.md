@@ -13,3 +13,32 @@
       -> At first, turborepo yung ginawang boilerplate code ni antogravity but to avoid overengineering, ginawa ko na lang na simple FE and BE yung structure sa folder. 
       -> in the prev project ko din using firebase, madalas gusto magpaset-up ng authentication but if single user lang naman, hindi na siya inimplement.
       -> Di rin linear yung workflow ng status ng mga card. it can do to TODO then jump sa DONE. then back to TODO. 
+
+## 📁 Project Structure
+
+```text
+├── backend/              # Node.js + Apollo GraphQL Server
+│   ├── src/
+│   │   ├── config/       # Firebase & App Configuration
+│   │   ├── graphql/      # Schema (TypeDefs) & Resolvers
+│   │   ├── services/     # Business Logic & Firestore Operations
+│   │   ├── types/        # TypeScript Definitions
+│   │   └── index.ts      # Server Entry Point
+│   └── package.json
+├── frontend/             # Next.js (App Router) + Tailwind CSS
+│   ├── src/
+│   │   ├── app/          # Next.js Pages & Layouts
+│   │   ├── components/   # UI Components (Shadcn UI)
+│   │   │   ├── layout/   # Header, Footer, etc.
+│   │   │   ├── tasks/    # Task specific components (Board/List)
+│   │   │   └── ui/       # Reusable base components
+│   │   ├── hooks/        # Custom React Hooks (React Query)
+│   │   ├── lib/          # Utilities & Providers
+│   │   ├── store/        # State Management (Zustand)
+│   │   └── types/        # Shared TypeScript Interfaces
+│   └── package.json
+├── docs/                 # Documentation & API Contracts
+├── firebase.json         # Firebase CLI Configuration
+├── firestore.rules       # Security Rules for Firestore
+└── README.md
+```
