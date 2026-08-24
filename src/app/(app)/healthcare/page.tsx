@@ -1,3 +1,5 @@
+"use client";
+
 import { StethoscopeIcon } from "@/components/icons";
 import { ComingSoon } from "@/components/layout/ComingSoon";
 

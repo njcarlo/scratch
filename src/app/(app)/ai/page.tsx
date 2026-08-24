@@ -1,3 +1,5 @@
+"use client";
+
 import { SparkleIcon } from "@/components/icons";
 import { ComingSoon } from "@/components/layout/ComingSoon";
 
