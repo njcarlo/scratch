@@ -30,7 +30,8 @@ export function BottomNav() {
     >
       <ul className="flex items-stretch justify-between px-1">
         {items.map(({ href, key, Icon }) => {
-          const active = pathname?.startsWith(href);
+                  const active =
+                    pathname === href || Boolean(pathname?.startsWith(`${href}/`));
           return (
             <li key={href} className="flex-1">
               <Link
