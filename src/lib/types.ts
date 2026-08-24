@@ -2,10 +2,9 @@
  * Core domain types for Gabay.
  *
  * Storage-agnostic on purpose: nothing here assumes localStorage or
- * Supabase. Both `LocalRepository` and `SupabaseRepository`
+ * Firebase. Both `LocalRepository` and `FirebaseRepository`
  * (src/lib/data/*) implement the same `DataRepository` interface against
- * these types, so screens never know which one is active. See
- * ARCHITECTURE.md for the full data-layer explanation.
+ * these types, so screens never know which one is active.
  */
 
 export type Language = "en" | "tl-en"; // English or Taglish (Filipino/Tagalog: Phase 2, see i18n)

@@ -7,10 +7,9 @@
  * to export/share it (see the Healthcare "visit summary" export).
  *
  * Phase 2 extension point: implement `StorageAdapter` against
- * Firebase/Firestore (auth-scoped per user) and swap it in at the single
- * call site in `src/lib/store.ts`. Nothing else in the app needs to change —
- * screens and components only ever talk to the zustand store, never to
- * storage directly.
+ * Firestore (auth-scoped per user) and swap it in at the single
+ * call site. Screens and components only ever talk to the repository
+ * (src/lib/data), never to storage directly.
  */
 
 export interface StorageAdapter {

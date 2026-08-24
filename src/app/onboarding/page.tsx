@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
 import { Chip } from "@/components/ui/Chip";
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { PlusIcon, TrashIcon } from "@/components/icons";
 import { useT, useLanguage } from "@/lib/i18n";
 import { useSessionStore } from "@/lib/session-store";
+import { useAuth } from "@/lib/auth/AuthProvider";
 import { useSaveProfile } from "@/lib/queries/profile";
 import { useUpsertSymptomLog } from "@/lib/queries/symptoms";
 import { useAddMedication } from "@/lib/queries/health";
@@ -70,6 +71,7 @@ const TOTAL_STEPS = 8;
 export default function OnboardingPage() {
   const t = useT();
   const { language, setLanguage } = useLanguage();
+  const { status } = useAuth();
   const step = useSessionStore((s) => s.onboardingStep);
   const setStep = useSessionStore((s) => s.setOnboardingStep);
   const router = useRouter();
@@ -93,6 +95,10 @@ export default function OnboardingPage() {
   const [trackWeight, setTrackWeight] = useState(false);
   const [meds, setMeds] = useState<DraftMed[]>([]);
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (status === "signed_out") router.replace("/login");
+  }, [status, router]);
 
   const next = () => setStep(Math.min(step + 1, TOTAL_STEPS - 1));
   const back = () => setStep(Math.max(step - 1, 0));
