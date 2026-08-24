@@ -106,27 +106,20 @@ below.
       read-only from onboarding; labs are a stub — matches the spec's own
       phase list, which puts full med/lab management in Phase 2)
 - [x] Profile/Settings
+- [x] Stub screens for `/ai`, `/community`, `/healthcare` (coming-soon
+      placeholders; dictionary keys `stub.*` already existed)
 
-`npm run build` and `npm run lint` both pass clean as of this commit
-(verified after `profile/page.tsx`, the last file written).
+`npm run build` and `npm run lint` both pass clean as of this commit.
 
 ## What's NOT built yet (in priority order)
 
-1. **Stub screens**: `/ai`, `/community`, `/healthcare` routes don't exist
-   yet, but the shell already links to them (AI FAB → `/ai`, header icons →
-   `/healthcare` and `/community`) — **these routes will 404 right now**.
-   Dictionary keys `stub.ai.*`, `stub.community.*`, `stub.healthcare.*`
-   already exist and are written — just need three small page components
-   using them (see any existing screen for the pattern: `<DisclaimerBanner>`
-   isn't needed there, just a centered icon + `t("stub.x.title")` +
-   `t("stub.x.body")`, styled consistent with the rest of the app).
-3. **PRODUCT.md / ARCHITECTURE.md** — not yet written as standalone docs;
+1. **PRODUCT.md / ARCHITECTURE.md** — not yet written as standalone docs;
    this HANDOFF.md currently carries that context instead. Worth splitting
    out if the project continues growing, but not blocking.
-4. **SETUP.md** — instructions for connecting a real Supabase project
+2. **SETUP.md** — instructions for connecting a real Supabase project
    (create project → run `supabase/migrations/0001_init.sql` → set the two
    `NEXT_PUBLIC_SUPABASE_*` env vars) — not yet written.
-5. Everything in "Deferred, documented, not built" from the original plan
+3. Everything in "Deferred, documented, not built" from the original plan
    remains deferred: medication/lab CRUD UI, doctor-report export, real AI
    chat, Community + moderation, provider directory, admin dashboards,
    payments, notifications, native mobile app. Don't build these without
