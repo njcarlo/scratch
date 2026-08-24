@@ -35,7 +35,7 @@ const GOAL_OPTIONS: Goal[] = [
 export default function ProfilePage() {
   const t = useT();
   const { language, setLanguage } = useLanguage();
-  const { user, isDemo } = useAuth();
+  const { user, isDemo, signOut } = useAuth();
   const { data: profile } = useProfile();
   const saveProfile = useSaveProfile();
   const clearAllData = useClearAllData();
@@ -79,6 +79,28 @@ export default function ProfilePage() {
           <p className="mt-1 text-[13px] leading-relaxed text-ink-700">
             {t("profile.demoModeBody")}
           </p>
+        </Card>
+      )}
+
+      {!isDemo && (
+        <Card>
+          <h2 className="mb-2 text-sm font-semibold text-ink-800">
+            {t("profile.account")}
+          </h2>
+          {user?.email && (
+            <p className="mb-3 text-sm text-ink-600">
+              {t("profile.signedInAs", { email: user.email })}
+            </p>
+          )}
+          <Button
+            variant="secondary"
+            fullWidth
+            onClick={async () => {
+              await signOut();
+            }}
+          >
+            {t("profile.signOut")}
+          </Button>
         </Card>
       )}
 

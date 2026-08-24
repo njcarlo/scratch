@@ -6,13 +6,16 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:hosting": "GABAY_STATIC_EXPORT=1 next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "emulators": "npx --yes firebase-tools emulators:start --only auth,firestore --project demo-gabay",
+    "verify:firebase": "npx --yes firebase-tools emulators:exec --only auth,firestore --project demo-gabay \"node scripts/verify-firebase.mjs\""
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.112.4",
     "@tanstack/react-query": "5.56.2",
     "clsx": "2.1.1",
+    "firebase": "12.18.0",
     "next": "16.3.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",

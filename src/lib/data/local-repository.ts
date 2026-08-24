@@ -32,7 +32,7 @@ const EMPTY: LocalBlob = {
  *
  * This is a real, working implementation (not a fake/mock UI), it's just
  * intentionally not a secure multi-device backend. It's what the app falls
- * back to automatically when Supabase isn't configured, so the product is
+ * back to automatically when Firebase isn't configured, so the product is
  * always usable and honest about where its data lives. See the Demo Mode
  * banner in src/components/layout/DemoModeBanner.tsx.
  */
