@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useT } from "@/lib/i18n";
 import { SparkleIcon } from "../icons";
 
@@ -12,6 +13,8 @@ import { SparkleIcon } from "../icons";
  */
 export function AiFab() {
   const t = useT();
+  const pathname = usePathname();
+  if (pathname?.startsWith("/ai")) return null;
   return (
     <Link
       href="/ai"

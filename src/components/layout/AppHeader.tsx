@@ -22,7 +22,8 @@ export function AppHeader() {
       </Link>
       <nav aria-label="Secondary" className="flex items-center gap-1">
         {secondary.map(({ href, key, Icon }) => {
-          const active = pathname?.startsWith(href);
+          const active =
+            pathname === href || Boolean(pathname?.startsWith(`${href}/`));
           return (
             <Link
               key={href}
