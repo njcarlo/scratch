@@ -10,18 +10,17 @@ import type {
 /**
  * The single seam between the app and wherever a user's data actually
  * lives. Every screen/hook talks to a `DataRepository` — never to
- * localStorage or Supabase directly.
+ * localStorage or Firebase directly.
  *
  * Two implementations exist:
- *  - `LocalRepository`    (local-repository.ts) — on-device only, used
- *    automatically in Demo Mode when no Supabase project is configured.
- *  - `SupabaseRepository` (supabase-repository.ts) — real Postgres tables
- *    with row-level security (see supabase/migrations/0001_init.sql),
- *    scoped to the authenticated user.
+ *  - `LocalRepository`     (local-repository.ts) — on-device only, used
+ *    automatically in Demo Mode when no Firebase project is configured.
+ *  - `FirebaseRepository`  (firebase-repository.ts) — Cloud Firestore
+ *    under `users/{uid}/…`, owner-scoped by firestore.rules.
  *
  * `getRepository()` in `index.ts` picks one at runtime. Adding a third
- * backend later (e.g. a custom API) means writing one more class that
- * implements this interface — nothing else in the app changes.
+ * backend later means writing one more class that implements this
+ * interface — nothing else in the app changes.
  */
 export interface DataRepository {
   readonly mode: "demo" | "live";

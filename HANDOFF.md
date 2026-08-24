@@ -1,10 +1,9 @@
 # Gabay — Handoff / Milestone
 
 Status snapshot for picking this project back up in a fresh session (e.g. a
-different Claude account/session). Read this first, then `ARCHITECTURE.md`
-(if present) and `SETUP.md` (if present) for deeper detail — if those two
-don't exist yet, they're on the to-do list below and this file is the
-source of truth in the meantime.
+different Claude account/session). Read this first, then `SETUP.md` for how
+to connect a free Firebase/GCP project. `ARCHITECTURE.md` is still not a
+standalone file — this handoff carries that context.
 
 ## What this is
 
@@ -16,44 +15,43 @@ rules (never diagnostic, always "educational / from your data / ask your
 doctor" tiering) and to a phased MVP-first plan the product owner
 specified in detail in this conversation's history.
 
-Repo: `njcarlo/scratch`, branch `claude/delete-repo-content-jx79il` (this
-branch was previously wiped clean at the user's request, then this app was
-built from scratch on it — do not confuse with `main`, which still has old,
-unrelated content and has not been merged).
+Repo: `njcarlo/scratch`, working branch `cursor/gabay-stub-screens-8960`
+(based on `claude/delete-repo-content-jx79il`). Do not confuse with
+`main`, which still has old, unrelated content and has not been merged.
 
 ## How to run it
 
 ```
 npm install
 npm run dev      # http://localhost:3000
-npm run build    # production build — currently passes clean
-npm run lint     # eslint . — currently passes clean
+npm run build    # production build
+npm run lint     # eslint .
 ```
 
 No environment variables are required to run and use the app. Without
-`NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` set, it runs in
-**Demo Mode**: a single on-device guest identity, all data in
+`NEXT_PUBLIC_FIREBASE_API_KEY` / `NEXT_PUBLIC_FIREBASE_PROJECT_ID` set, it
+runs in **Demo Mode**: a single on-device guest identity, all data in
 `localStorage`. This is intentional, not a placeholder — see "Architecture"
-below.
+below. With those vars set, `/login` uses Firebase Auth and logs go to
+Cloud Firestore. See SETUP.md (Spark / always-free GCP).
 
 ## Architecture (decided, don't re-litigate without reason)
 
 - **Next.js 16.3.2, App Router, TypeScript strict, Tailwind.** Mobile-first
   (`max-w-app` = 480px column), no separate native app in this phase.
+- **Live backend is Firebase on GCP, Spark/always-free only.** Auth =
+  Firebase Authentication. Database = Cloud Firestore (`users/{uid}/…`).
+  Hosting = Firebase Hosting (static export) or Cloud Run for `next start`.
+  No Cloud Functions, Vertex AI, or Cloud SQL.
 - **Data layer is backend-swappable by design.** `src/lib/data/repository.ts`
   defines a `DataRepository` interface. `local-repository.ts` (localStorage)
-  and `supabase-repository.ts` (real Postgres via Supabase, RLS-scoped) both
+  and `firebase-repository.ts` (Firestore, rules in `firestore.rules`) both
   implement it. `src/lib/data/index.ts#getRepository()` picks one based on
-  whether Supabase env vars are set. **Screens never talk to storage
+  whether Firebase env vars are set. **Screens never talk to storage
   directly** — always through the React Query hooks in `src/lib/queries/*`.
-- **SQL schema + RLS**: `supabase/migrations/0001_init.sql`. Only Phase-1
-  tables exist (profiles, cycle_logs, symptom_logs, food_logs, weight_logs,
-  medications). This has never been run against a real Supabase project in
-  this environment (no credentials available) — it's written correctly but
-  unverified end-to-end. Verifying it against a real project is real,
-  valuable next work.
 - **Auth**: `src/lib/auth/AuthProvider.tsx` — same real/demo split as the
-  data layer.
+  data layer. Live mode is email/password (and optional email link) via
+  Firebase Auth; `/login` is the screen; Profile has Sign out.
 - **i18n is mandatory and already wired**: `src/lib/i18n/dictionary.ts` has
   every user-facing string in `en` and `tl-en` (Taglish, natural
   code-switching, not machine translation). Components call `useT()` /
@@ -82,9 +80,9 @@ below.
 
 - [x] Project scaffold, design tokens, icon set, UI primitives (Button,
       Card, Chip, DisclaimerBanner, InfoTierBadge)
-- [x] Data model (`src/lib/types.ts`), repository pattern, Supabase +
-      Local implementations, SQL migration
-- [x] Auth abstraction (Supabase + Demo Mode)
+- [x] Data model (`src/lib/types.ts`), repository pattern, Firebase
+      Firestore + Local implementations, owner-only security rules
+- [x] Auth abstraction (Firebase Auth + Demo Mode) and `/login`
 - [x] i18n system (en / tl-en) with a large existing dictionary
 - [x] React Query hooks over the repository (profile, cycle, symptoms,
       food, weight, medications, settings/export/clear)
@@ -108,6 +106,8 @@ below.
 - [x] Profile/Settings
 - [x] Stub screens for `/ai`, `/community`, `/healthcare` (coming-soon
       placeholders; dictionary keys `stub.*` already existed)
+- [x] SETUP.md — Spark-plan Firebase Auth + Firestore + Hosting, optional
+      Cloud Run always-free, local emulators
 
 `npm run build` and `npm run lint` both pass clean as of this commit.
 
@@ -116,9 +116,9 @@ below.
 1. **PRODUCT.md / ARCHITECTURE.md** — not yet written as standalone docs;
    this HANDOFF.md currently carries that context instead. Worth splitting
    out if the project continues growing, but not blocking.
-2. **SETUP.md** — instructions for connecting a real Supabase project
-   (create project → run `supabase/migrations/0001_init.sql` → set the two
-   `NEXT_PUBLIC_SUPABASE_*` env vars) — not yet written.
+2. **A provisioned cloud project in this environment** — there are no GCP
+   credentials here, so Firestore rules have not been deployed to a real
+   project. Use SETUP.md (or `npm run emulators`) to verify.
 3. Everything in "Deferred, documented, not built" from the original plan
    remains deferred: medication/lab CRUD UI, doctor-report export, real AI
    chat, Community + moderation, provider directory, admin dashboards,
@@ -128,7 +128,7 @@ below.
 ## Working conventions to keep
 
 - No hardcoded user-facing strings — dictionary + `useT()` only.
-- No screen imports `localStorage`, Supabase, or `food-db.ts` directly —
+- No screen imports `localStorage`, Firebase, or `food-db.ts` directly —
   always go through `src/lib/data`, `src/lib/auth`, or `food-service.ts`.
 - Every AI/insight-like claim gets an `<InfoTierBadge>` and sits behind a
   `<DisclaimerBanner>` — never state a food/symptom claim as fact.
